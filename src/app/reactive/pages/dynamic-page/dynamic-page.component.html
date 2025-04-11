@@ -29,12 +29,14 @@
                 <input
                 class="form-control"
                 placeholder="Agregar favorito"
-
+                [formControl]="newFavorite"
+                (keydown.enter)="addFavorite()"
                        >
 
 
                 <button class="btn btn-outline-primary"
-                        type="button">
+                        type="button"
+                        (click)="addFavorite()">
                     Agregar favorito
                 </button>
             </div>
@@ -55,13 +57,14 @@
                     [formControlName]="i">
 
                     <button class="btn btn-outline-danger"
-                            type="button">
+                            type="button"
+                            (click)="onDeleteFavorite(i)">
                       Eliminar
                   </button>
                 </div>
                 @if (formUtils.isValidFieldArray(favoriteGames, i) ) {
                 <span class="form-text text-danger">
-                   Este campo es requerido
+                   {{ formUtils.getFieldErrorInArray(favoriteGames, i) }}
                 </span>
                 }
 

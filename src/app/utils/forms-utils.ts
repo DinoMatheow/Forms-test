@@ -1,8 +1,26 @@
-import { FormArray, FormGroup } from "@angular/forms";
+import { FormArray, FormGroup, ValidationErrors } from "@angular/forms";
 
 export class FormsUtils {
 
   //regular expressions
+
+
+  static getTextError(errors: ValidationErrors){
+    for( const key of Object.keys(errors) ) {
+
+      switch(key) {
+        case 'required':
+          return 'This field is required';
+        case 'minlength':
+          return `Minimun value of ${errors['minlength'].requiredLength} characters.`;
+        case 'min':
+          return `Minimun value of ${errors['min'].min} `;
+
+
+      }
+    }
+    return null;
+  }
 
    static isValidField( form: FormGroup, fieldName: string): boolean | null {
     return  (
@@ -15,20 +33,8 @@ export class FormsUtils {
 
       const errors = form.controls[fieldName].errors ?? {};
 
-      for( const key of Object.keys(errors) ) {
+      return FormsUtils.getTextError(errors);
 
-        switch(key) {
-          case 'required':
-            return 'This field is required';
-          case 'minlength':
-            return `Minimun value of ${errors['minlength'].requiredLength} characters.`;
-          case 'min':
-            return `Minimun value of ${errors['min'].min} `;
-
-
-        }
-      }
-      return null;
 }
 
 
@@ -36,25 +42,12 @@ static isValidFieldArray(formArray: FormArray, index: number) {
   return formArray.controls[index].errors && formArray.controls[index].touched;
 }
 
-static getFieldErrorInArray(FormArray: FormArray, index: number): string | null {
-  if(!FormArray.controls[index]) return null;
+static getFieldErrorInArray(formArray: FormArray, index: number): string | null {
+  if(formArray.controls.length === 0) return null;
 
-  const errors = FormArray.controls[index].errors ?? {};
+  const errors = formArray.controls[index].errors ?? {};
 
-  for( const key of Object.keys(errors) ) {
-
-    switch(key) {
-      case 'required':
-        return 'This field is required';
-      case 'minlength':
-        return `Minimun value of ${errors['minlength'].requiredLength} characters.`;
-      case 'min':
-        return `Minimun value of ${errors['min'].min} `;
-
-
-    }
-  }
-  return null;
+  return FormsUtils.getTextError(errors);
 }
 
 

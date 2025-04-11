@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormArray, FormControl } from '@angular/forms';
 import { FormsUtils } from '../../../utils/forms-utils';
 @Component({
   selector: 'app-dynamic-page',
@@ -25,6 +25,8 @@ export class DynamicPageComponent {
 
   })
 
+  newFavorite = new FormControl('', [Validators.required]);
+
   get favoriteGames() {
 return this.myForm.get('favoriteGames') as FormArray;
  }
@@ -33,4 +35,17 @@ return this.myForm.get('favoriteGames') as FormArray;
   return formArray.controls[index].errors && formArray.controls[index].touched;
 
 }
+
+addFavorite() {
+  if (this.newFavorite.invalid) return;
+  const newFavorite = this.newFavorite.value;
+
+  this.favoriteGames.push(this.fb.control(newFavorite, [Validators.required]));
+
+  this.newFavorite.reset();
+}
+onDeleteFavorite(index: number) {
+  this.favoriteGames.removeAt(index);
+}
+
 }
