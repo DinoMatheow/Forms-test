@@ -20,7 +20,7 @@ export class DynamicPageComponent {
       ['Dino game', Validators.required],
       ['Devil cry', Validators.required],
     ],
-    Validators.minLength(3)
+    Validators.minLength(2)
   )
 
   })
@@ -45,7 +45,13 @@ addFavorite() {
   this.newFavorite.reset();
 }
 onDeleteFavorite(index: number) {
-  this.favoriteGames.removeAt(index);
+  this.favoriteGames.removeAt(index );
 }
+
+onSubmit() {
+this.myForm.markAllAsTouched();
+
+}
+
 
 }
