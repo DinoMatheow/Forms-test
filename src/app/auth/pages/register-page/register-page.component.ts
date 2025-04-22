@@ -17,18 +17,17 @@ formUtils = FormsUtils;
 
 myForm: FormGroup = this.fb.group({
   name: ['', [Validators.required, Validators.pattern(this.formUtils.namePattern)]],
-  email: ['', [Validators.required, Validators.pattern(this.formUtils.emailPattern)]],
-  username: ['', [Validators.required, Validators.pattern(this.formUtils.notOnlySpacesPattern)]],
+  email: ['',
+ [Validators.required, Validators.pattern(this.formUtils.emailPattern)],
+ [FormsUtils.chekingServerValidations]],
+  username: ['', [Validators.required, Validators.pattern(this.formUtils.notOnlySpacesPattern), FormsUtils.noStrider]],
   password: ['', [Validators.required, Validators.minLength(6)]],
   confirmPassword: ['', [Validators.required]],
 },{
   validators:[
 this.formUtils.isFieldOneEqualFieldTwo('password', 'confirmPassword')
   ]
-}
-
-
-);
+});
 
 
 // isFieldOneEqualFieldTwo(fieldOne: string, fieldTwo: string){

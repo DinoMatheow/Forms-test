@@ -1,5 +1,17 @@
 import { AbstractControl, FormArray, FormGroup, ValidationErrors } from "@angular/forms";
 
+
+
+
+
+
+async function sleep(){
+  return new Promise((resolve) =>{
+    setTimeout(() =>{
+      resolve(true);
+    }, 2500);
+  });
+}
 export class FormsUtils {
 
   //regular expressions
@@ -19,10 +31,17 @@ export class FormsUtils {
           return `Minimun value of ${errors['min'].min} `;
           case 'email':
             return 'The email is not valid  ';
+
+        case 'emailTakin':
+          return 'The email was used for other user';
+          case 'noStrider':
+            return 'The username is not valid';
           case 'pattern':
             if(errors['pattern'].requiredPattern  === FormsUtils.emailPattern){
              return 'The email is not valid';
             }
+
+
       return 'Error of pattern against regular expression';
       default:
         return 'This field is not valid';
@@ -70,7 +89,32 @@ static isFieldOneEqualFieldTwo(fieldOne: string, fieldTwo: string){
   };
  }
 
+static async chekingServerValidations(
+  control: AbstractControl):
+  Promise<ValidationErrors | null> {
 
+    console.log('validating...');
+
+await sleep();
+
+const formValue = control.value;
+
+if(formValue === 'hello@world.com'){
+  return {
+emailTaken: true,
+  }
+}
+
+return null
+
+}
+
+
+static noStrider(control: AbstractControl): ValidationErrors | null{
+ const value = control.value;
+
+  return value === 'Akinato' ? {noStrider: true} : null;
+}
 
 
 
