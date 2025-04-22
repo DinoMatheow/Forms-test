@@ -1,9 +1,11 @@
-import { FormArray, FormGroup, ValidationErrors } from "@angular/forms";
+import { AbstractControl, FormArray, FormGroup, ValidationErrors } from "@angular/forms";
 
 export class FormsUtils {
 
   //regular expressions
-
+  static namePattern = '([a-zA-Z]+) ([a-zA-Z]+)';
+  static emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+  static notOnlySpacesPattern = '^[a-zA-Z0-9]+$';
 
   static getTextError(errors: ValidationErrors){
     for( const key of Object.keys(errors) ) {
@@ -15,6 +17,15 @@ export class FormsUtils {
           return `Minimun value of ${errors['minlength'].requiredLength} characters.`;
         case 'min':
           return `Minimun value of ${errors['min'].min} `;
+          case 'email':
+            return 'The email is not valid  ';
+          case 'pattern':
+            if(errors['pattern'].requiredPattern  === FormsUtils.emailPattern){
+             return 'The email is not valid';
+            }
+      return 'Error of pattern against regular expression';
+      default:
+        return 'This field is not valid';
 
 
       }
@@ -48,6 +59,16 @@ static getFieldErrorInArray(formArray: FormArray, index: number): string | null 
 
   return FormsUtils.getTextError(errors);
 }
+
+static isFieldOneEqualFieldTwo(fieldOne: string, fieldTwo: string){
+  return (FormGroup: AbstractControl) =>{
+ const field1Value = FormGroup.get(fieldOne)?.value;
+ const field2Value = FormGroup.get(fieldTwo)?.value;
+
+ return field1Value === field2Value ? null :{passwordsNotEqual: true};
+
+  };
+ }
 
 
 
